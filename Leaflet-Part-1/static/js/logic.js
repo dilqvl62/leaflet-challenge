@@ -14,8 +14,6 @@ d3.json(queryUrl).then(function (data) {
     if(magnitude >= 90) 
        return '#00FF00'
     else if (magnitude >= 70 && magnitude < 90) 
-       return '#33FF00'
-    else if (magnitude >= 70 && magnitude < 90) 
        return '#66FF00'
     else if (magnitude >= 50 && magnitude < 70) 
        return '#99FF00'
@@ -98,5 +96,24 @@ d3.json(queryUrl).then(function (data) {
     L.control.layers(baseMaps, overlayMaps, {
       collapsed: false
     }).addTo(myMap);
+    
+    // Creating a control with legend 
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function(myMap) {
+
+      var div = L.DomUtil.create('div', 'info legend'),
+      grades = [-10,10, 30, 50, 70, 90],
+      labels = [];
+      // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+          div.innerHTML +=
+              '<i style="background:' + getDarkerColor(grades[i] + 1) + '"></i> ' +
+              grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+      }
+
+      return div;
+      
+    };
+    legend.addTo(myMap);
   
   }
